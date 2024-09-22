@@ -47,7 +47,11 @@ export default function initializeSocketServer() {
 			const requester = onlineUsers.get(requesterSocketId);
 			const acceptor = onlineUsers.get(socket.id);
 			if (!requester || !acceptor) return;
-			startNewGame(tempKey, requester, acceptor);
+			startNewGame(
+				tempKey,
+				{ ...requester, socketId: requesterSocketId },
+				{ ...acceptor, socketId: socket.id }
+			);
 			TempKeysToPlayWithRequesters.delete(tempKey);
 		});
 

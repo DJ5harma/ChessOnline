@@ -20,12 +20,12 @@ export default function connectSocket(myInfo?: IonlineUser) {
 	socket.on('A new match request', (data) => addNewMatchRequest(data));
 	socket.on('Your match is at url', (url: string) => goto(url));
 }
-export function sendAMatchRequest(opponentSocketId: string) {
-	socket?.emit('I want to play with', opponentSocketId);
-}
-export function sendAMatchAcceptance(opponentSocketId: string, tempKey: string) {
-	socket?.emit('I accept a match with', opponentSocketId, tempKey);
-}
-export function disconnectSocket() {
-	socket?.disconnect();
-}
+
+export const socketC = {
+	sendAMatchRequest: (opponentSocketId: string) =>
+		socket?.emit('I want to play with', opponentSocketId),
+	sendAMatchAcceptance: (opponentSocketId: string, tempKey: string) =>
+		socket?.emit('I accept a match with', opponentSocketId, tempKey),
+	startMyGame: (url: string) => socket?.emit('start my game', url),
+	disconnectSocket: () => socket?.disconnect()
+};

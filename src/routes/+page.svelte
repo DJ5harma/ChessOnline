@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { onlineUsers } from '../contexts/onlineUsers';
-	import { sendAMatchAcceptance, sendAMatchRequest } from '../socketio/client/initialize';
 	import {
 		ignoreAllMatchRequests,
 		ignoreMatchRequest,
 		matchRequests
 	} from '../contexts/matchRequests';
+	import { socketC } from '../socketio/client/initialize';
 </script>
 
 <svelte:head>
@@ -27,7 +27,8 @@
 			<div class="flex">
 				<button
 					class="bg-blue-700 text-white"
-					onclick={() => sendAMatchAcceptance(socketId, requester.tempKey)}>Join Game!</button
+					onclick={() => socketC.sendAMatchAcceptance(socketId, requester.tempKey)}
+					>Join Game!</button
 				>
 				<button class="bg-red-700 text-white" onclick={() => ignoreMatchRequest(socketId)}
 					>Ignore</button
@@ -44,7 +45,7 @@
 			</p>
 			{#if user.wantingToPlay}
 				<button
-					onclick={() => sendAMatchRequest(socketId)}
+					onclick={() => socketC.sendAMatchRequest(socketId)}
 					class="bg-green-700 text-white p-2 rounded-l-none text-sm cursor-pointer"
 				>
 					Request A match
