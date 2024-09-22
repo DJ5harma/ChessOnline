@@ -1,12 +1,16 @@
 import { writable } from 'svelte/store';
+import type { CuserDetails } from '../utils/types';
 
-export const userDetails = writable({
-	username: `Anonymous ${(Math.random() * 10000000).toFixed(0)}`,
+export const userDetails = writable<CuserDetails>({
+	username: '',
 	gamesPlayed: 0,
 	gamesWon: 0,
 	gamesLost: 0,
 	isGuest: true,
-	socketId: ''
+	connected: false
 });
+export function updateUserDetails(data: CuserDetails) {
+	userDetails.update(() => data);
+}
 
 export const showForm = writable(false);

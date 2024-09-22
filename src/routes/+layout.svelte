@@ -1,8 +1,26 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import '../app.css';
 	import Form from '../components/Form.svelte';
 	import Navbar from '../components/Navbar.svelte';
-	import { showForm } from '../contexts/userDetails';
+	import { showForm, updateUserDetails, userDetails } from '../contexts/userDetails';
+	import type { IonlineUser } from '../utils/types';
+	import connectSocket, { disconnectSocket } from '../socketio/client/initialize';
+
+	onMount(() => {
+		let username = $userDetails.username || localStorage.getItem('guestUsername');
+		if (!username) {
+			username = `Anonymous ${(Math.random() * 10000000).toFixed(0)}`;
+			localStorage.setItem('guestUsername', username);
+		}
+		let myInfo: IonlineUser = {
+			username: username,
+			wantingToPlay: true
+		};
+		connectSocket(myInfo);
+		updateUserDetails({ ...$userDetails, username });
+		return () => disconnectSocket();
+	});
 </script>
 
 <div class="app">
